@@ -1,0 +1,28 @@
+﻿https://docs.python.org/2.7/library/unicodedata.html#module-unicodedata
+
+Python unicodedata Module Examples
+https://www.programcreek.com/python/index/96/unicodedata
+
+Unicode Block 'Devanagari'
+http://www.fileformat.info/info/unicode/block/devanagari/index.htm
+
+Understanding unicode in python and writing text in devanagri script
+https://whatilearned2day.wordpress.com/2015/09/13/understanding-unicode-in-python-and-writing-text-in-devanagri-script/
+
+Question regarding handling of Unicode data in Devnagari
+https://mail.python.org/pipermail/python-list/2009-September/551415.html
+
+Python Standard Library
+https://www.safaribooksonline.com/library/view/python-standard-library/0596000960/
+
+How to render combining marks consistently across platforms: a long story
+https://marc.durdin.net/2015/01/how-to-rendering-combining-marks-consistently-across-platforms-a-long-story/
+
+TITUS - Thesaurus Indogermanischer Text- und Sprachmaterialien
+http://titus.uni-frankfurt.de/indexe.htm
+
+http://titus.uni-frankfurt.de/unicode/unicsel/lat/0061.htm
+
+http://titus.uni-frankfurt.de/unicode/unicsel/latkadd.htm
+E40A = 58378 (  );; 0061 0304 0303 = 97 772 771 ( ā̃ );; LATIN SMALL LETTER A WITH MACRON AND TILDE ABOVE
+ā̃
