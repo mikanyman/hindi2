@@ -67,7 +67,7 @@ def create_word_pattern_latin(word):
     return word_buffer
 
 # CALL:
-print create_word_pattern_latin('Sana.')
+#print create_word_pattern_latin('Sana.')
 #print create_word_patterns(cleaned_content)
 
 def create_word_pattern_hindi(word):
@@ -96,7 +96,7 @@ def create_word_pattern_hindi(word):
     return word_buffer
 
 # CALL:
-print create_word_pattern_latin('Sana.')
+#print create_word_pattern_latin('Sana.')
 #print create_word_patterns(cleaned_content)
 
 
