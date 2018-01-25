@@ -7,6 +7,11 @@ upper_c = ['B', 'C', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R',
 lower_c = ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'z']
 # ṅ, ñ, ṭ, ḍ, ṛ, ṇ, ś, ṣ
 lower_c_diacritics = [u'\u1e45', u'\u00f1', u'\u1e6d', u'\u1e0d', u'\u1e5b', u'\u1e47', u'\u015b', u'\u1e63']
+vowels = upper_v + lower_v + lower_v_diacritics
+consonants = upper_c + lower_c + lower_c_diacritics
+aspirated_consonants = ['kh', 'gh', 'ch', 'jh', 'th', 'dh', 'ph', 'bh', u'ṭh', u'ḍh', u'ṛh']
+diftongs = ['ai', 'au']
+
 conjunct_tuple_list = [
     (u'k', u'k'), (u'k', u'kh'), (u'k', u'g'), (u'k', u'gh'), (u'k', u'ṅ'), (u'k', u'c'), (u'k', u'ch'), (u'k', u'j'),
     (u'k', u'z'), (u'k', u'jh'), (u'k', u'ñ'), (u'k', u'ṭ'), (u'k', u'ṭh'), (u'k', u'ḍ'), (u'k', u'ṛ'), (u'k', u'ḍh'),
@@ -236,13 +241,7 @@ conjunct_tuple_list = [
     (u'ḷ', u'ph'), (u'ḷ', u'f'), (u'ḷ', u'b'), (u'ḷ', u'bh'), (u'ḷ', u'm'), (u'ḷ', u'y'), (u'ḷ', u'r'), (u'ḷ', u'l'),
     (u'ḷ', u'v'), (u'ḷ', u'ś'), (u'ḷ', u'ṣ'), (u'ḷ', u's'), (u'ḷ', u'h'), (u'ḷ', u'ḷ'), (u'ḷ', u'kṣ'), (u'ḷ', u'jñ')
 ]
-vowels = upper_v + lower_v + lower_v_diacritics
-consonants = upper_c + lower_c + lower_c_diacritics
-
-
 def translit_char(char):
-
-    char.decode('utf-8')
 
     # --- Latin Single Vowels ---
     if char == 'a':
@@ -256,19 +255,19 @@ def translit_char(char):
     if char == 'o':
         ret_val = 'ओ'
 
-    # --- Latin Vowels with Diacritics ---
-    if char == '\xc4\x81':
-        ret_val = 'आ'  # ā u'ā' u'\u0101' '\xc4\x81'
-    if char == u'\u01e1':
-        ret_val = 'ऑ'  # ǡ
-    if char == u'\u012b':
-        ret_val = 'ई'  # ī
-    if char == u'\u016b':
-        ret_val = 'ऊ'  # ū
-    if char == u'\u1e5b':
-        ret_val = 'ऋ'  # ṛ
+    # --- Latin Vowels withu Diacritics ---
+    if char == u'ā':  # ā  u'\u0101'
+        ret_val = 'आ'
+    if char == u'ǡ':  # ǡ  u'\u01e1'
+        ret_val = 'ऑ'
+    if char == u'ī':  # ī  u'\u012b'
+        ret_val = 'ई'
+    if char == u'ū':  # ū  u'\u016b'
+        ret_val = 'ऊ'
+    if char == u'ṛ':  # ṛ u'\u1e5b'
+        ret_val = 'ऋ'
 
-    # --- Latin Diftongs ---
+    # --- Latin Independent Diftongs ---
     if char == 'ai':
         ret_val = 'ऐ'
     if char == 'au':
@@ -313,50 +312,52 @@ def translit_char(char):
         ret_val = 'ह'
 
     # --- Single Latin Consonants with Diacritics ---
-    if char == u'\u1e45':
-        ret_val = 'ङ'  # ṅ
-    if char == u'\u00f1':
-        ret_val = 'ञ'  # ñ
-    if char == u'\u1e6d':
-        ret_val = 'ट'  # ṭ
-    if char == u'\u1e0d':
-        ret_val = 'ड'  # ḍ
-    if char == u'\u1e5b':
-        ret_val = 'ड़'  # ṛ
-    if char == u'\u1e47':
-        ret_val = 'ण'  # ṇ
-    if char == u'\u015b':
-        ret_val = 'श'  # ś
-    if char == u'\u1e63':
-        ret_val = 'ष'  # ṣ
+    if char == u'\u1e45':  # ṅ
+        ret_val = 'ङ'
+    if char == u'\u00f1':  # ñ
+        ret_val = 'ञ'
+    if char == u'\u1e6d':  # ṭ
+        ret_val = 'ट'
+    if char == u'\u1e0d':  # ḍ
+        ret_val = 'ड'
+    if char == u'\u1e5b':  # ṛ
+        ret_val = 'ड़'
+    if char == u'\u1e47':  # ṇ
+        ret_val = 'ण'
+    if char == u'\u015b':  # ś
+        ret_val = 'श'
+    if char == u'\u1e63':  # ṣ
+        ret_val = 'ष'
 
     # --- Double Latin Consonants ---
-    if char == 'kh': 
+    if char == 'kh':
         ret_val = 'ख'
-    if char == 'gh': 
+    if char == 'gh':
         ret_val = 'घ'
-    if char == 'ch': 
+    if char == 'ch':
         ret_val = 'छ'
-    if char == 'jh': 
+    if char == 'jh':
         ret_val = 'झ'
-    if char == 'th': 
+    if char == 'th':
         ret_val = 'थ'
-    if char == 'dh': 
+    if char == 'dh':
         ret_val = 'ध'
-    if char == 'ph': 
+    if char == 'ph':
         ret_val = 'फ'
-    if char == 'bh': 
+    if char == 'bh':
         ret_val = 'भ'
-    if char == 'ṭh'.decode('utf-8'): 
+    """
+    if char == 'ṭh':  # .decode('utf-8')
         ret_val = 'ठ'
-    if char == 'ḍh'.decode('utf-8'): 
+    if char == 'ḍh':   # .decode('utf-8')
         ret_val = 'ढ'
-    if char == 'ṛh'.decode('utf-8'): 
+    if char == 'ṛh':  # .decode('utf-8')
         ret_val = 'ढ़'
-    if char == 'll': ret_val = 'ळ'
+    """
+    if char == 'll':
+        ret_val = 'ळ'
 
     return ret_val
-
 
 def translit_maatra(char):
 
@@ -371,7 +372,7 @@ def translit_maatra(char):
         ret_val = 'ो'
 
     # --- Latin Vowels with Diacritics ---
-    if char == 'ā':
+    if char == u'ā':
         ret_val = 'ा'  # ā u'\u0101'
     if char == u'\u01e1':
         ret_val = 'ॉ'  # ǡ
@@ -382,231 +383,138 @@ def translit_maatra(char):
     if char == u'\u1e5b':
         ret_val = 'ृ'  # ṛ
 
-    # --- Latin Diftongs ---
-
-    if char == 'ai': 
+    # --- Latin Matra Diftongs ---
+    if char == 'ai':
         ret_val = 'ै'
-    if char == 'ou': 
+    if char == 'au':
         ret_val = 'ौ'
 
     return ret_val
 
 
-def latin_to_deva(word):
+def latin_to_deva(lat_word):
 
-    #word = word.decode('utf-8')
-    len_word = len(word)
-    # word[0] -- first latin character
-    # word[len_word - 1] -- last latin character
+    lat_word = lat_word.decode('utf-8')
 
-    char_buffer = ''
-    lat_c_list = []
+    lat_char_list = []
 
-    for i, char in enumerate(word):
+    # --- Create w_list (Word as Latin list) ---
+    for i, lat_char in enumerate(lat_word):
 
-        prev_char = word[i - 1]
+        prev_lat_char = lat_word[i - 1]
 
-        # --- process latin consonant clusters ---
+        # --- process multilatin ---
 
-        if char == 'h' and prev_char == 'k':
-            lat_c_list.append('kh')
-            lat_c_list.pop(i - 1)
+        # --- kh ---
+        if lat_char == 'h' and prev_lat_char == 'k':
+            lat_char_list.append('kh')
+            lat_char_list.pop(i - 1)
             continue
-        elif char == 'h' and prev_char == 'g':
-            lat_c_list.append('gh')
-            lat_c_list.pop(i - 1)
+        # --- gh ---
+        if lat_char == 'h' and prev_lat_char == 'g':
+            lat_char_list.append('gh')
+            lat_char_list.pop(i - 1)
             continue
-        elif char == 'h' and prev_char == 'c':
-            lat_c_list.append('ch')
-            lat_c_list.pop(i - 1)
+        # --- ch ---
+        if lat_char == 'h' and prev_lat_char == 'c':
+            lat_char_list.append('ch')
+            lat_char_list.pop(i - 1)
             continue
-        elif char == 'h' and prev_char == 'j':
-            lat_c_list.append('jh')
-            lat_c_list.pop(i - 1)
+        # --- jh ---
+        if lat_char == 'h' and prev_lat_char == 'j':
+            lat_char_list.append('jh')
+            lat_char_list.pop(i - 1)
             continue
-        elif char == 'h' and prev_char == 't':
-            lat_c_list.append('th')
-            lat_c_list.pop(i - 1)
+        # --- th ---
+        if lat_char == 'h' and prev_lat_char == 't':
+            lat_char_list.append('th')
+            lat_char_list.pop(i - 1)
             continue
-        elif char == 'h' and prev_char == 'd':
-            lat_c_list.append('dh')
-            lat_c_list.pop(i - 1)
+        # --- dh ---
+        if lat_char == 'h' and prev_lat_char == 'd':
+            lat_char_list.append('dh')
+            lat_char_list.pop(i - 1)
             continue
-        elif char == 'h' and prev_char == 'p':
-            lat_c_list.append('ph')
-            lat_c_list.pop(i - 1)
+        # --- ph ---
+        if lat_char == 'h' and prev_lat_char == 'p':
+            lat_char_list.append('ph')
+            lat_char_list.pop(i - 1)
             continue
-        elif char == 'h' and prev_char == 'b':
-            lat_c_list.append('bh')
-            lat_c_list.pop(i - 1)
+        # --- bh ---
+        if lat_char == 'h' and prev_lat_char == 'b':
+            lat_char_list.append('bh')
+            lat_char_list.pop(i - 1)
             continue
-        elif char == 'h' and prev_char == 'ṭ':
-            lat_c_list.append('ṭh')
-            lat_c_list.pop(i - 1)
-            continue
-        elif char == 'h' and prev_char == 'ḍ':
-            lat_c_list.append('ḍh')
-            lat_c_list.pop(i - 1)
-            continue
-        elif char == 'h' and prev_char == 'ṛ':
-            lat_c_list.append('ṛh')
-            lat_c_list.pop(i - 1)
-            continue
-        elif char == 'l' and prev_char == 'l':
-            lat_c_list.append('ll')
-            lat_c_list.pop(i - 1)
-            continue
-        else:
-            lat_c_list.append(char)
 
-    # --- Translitterate Latin-->Devanagari ---
+        # --- Process diftongs ---
+        # --- ai ---
+        if lat_char == 'i' and prev_lat_char == 'a':
+            lat_char_list.append('ai')
+            lat_char_list.pop(i - 1)
+            continue
+        # --- ai ---
+        if lat_char == 'u' and prev_lat_char == 'a':
+            lat_char_list.append('au')
+            lat_char_list.pop(i - 1)
+            continue
 
-    deva_c_string = ''
+        lat_char_list.append(lat_char)
 
-    for i, lat_c in enumerate(lat_c_list):
 
-        prev_lat_c = lat_c_list[i - 1]
+    # --- Translitterate Latin-->Hindi ---
+    deva_char_string = ''
+
+    for i, lat_item in enumerate(lat_char_list):
+
+        prev_lat_item = lat_char_list[i - 1]
 
         # --- process first character ---
         if i == 0:
-            deva_c_string = deva_c_string + translit_char(lat_c)
+            deva_char_string = deva_char_string + translit_char(lat_item)
             continue
 
-        # --- process a & matras ---
-        if lat_c == 'a':
+        # --- process a ---
+        if lat_item == 'a':
             continue
-        elif lat_c in vowels and prev_lat_c in consonants:
-            deva_c_string = deva_c_string + translit_maatra(lat_c)
-        else:
-            deva_c_string = deva_c_string + translit_char(lat_c)
 
-    return deva_c_string
+        # --- process conjuncts ---
+        conjunct_tuple = (prev_lat_item, lat_item)
+        if conjunct_tuple in conjunct_tuple_list:
+            deva_char_string = deva_char_string[:-3]
+            deva_char_string = deva_char_string + translit_char(prev_lat_item) + '्' + translit_char(lat_item)
+            continue
 
+        # --- process aspirated consonants ---
+        if lat_item in aspirated_consonants:
+            deva_char_string = deva_char_string + translit_char(lat_item)
+            continue
 
-    """
-        # --- pick FIRST CHARACTER in word ---
-        if i == 0:
-            char_buffer = char_buffer + translit_char(char)
+        # --- process simple matra after aspirated consonant ---
+        if lat_item in vowels and prev_lat_item in aspirated_consonants:
+            deva_char_string = deva_char_string + translit_maatra(lat_item)
+            continue
 
-        else:
-            # --- second and next ---
-            if char in consonants:
+        # --- process simple matra after unaspirated consonant ---
+        if lat_item in vowels and prev_lat_item in consonants:
+            deva_char_string = deva_char_string + translit_maatra(lat_item)
+            continue
 
-                # --- process ASPIRATED consonants ---
-                # --- kh ---
-                if char == 'h' and prev_char == 'k':
-                    char_buffer = char_buffer + translit_char(char)
-                    char_buffer = char_buffer[:-6]
-                    char_buffer = char_buffer + 'ख'
-                # --- gh ---
-                elif char == 'h' and prev_char == 'g':
-                    char_buffer = char_buffer + translit_char(char)
-                    char_buffer = char_buffer[:-6]
-                    char_buffer = char_buffer + 'घ'
-                # --- ch ---
-                elif char == 'h' and prev_char == 'c':
-                    char_buffer = char_buffer + translit_char(char)
-                    char_buffer = char_buffer[:-6]
-                    char_buffer = char_buffer + 'छ'
-                # --- jh ---
-                elif char == 'h' and prev_char == 'j':
-                    char_buffer = char_buffer + translit_char(char)
-                    char_buffer = char_buffer[:-6]
-                    char_buffer = char_buffer + 'झ'
-                # --- th ---
-                elif char == 'h' and prev_char == 't':
-                    char_buffer = char_buffer + translit_char(char)
-                    char_buffer = char_buffer[:-6]
-                    char_buffer = char_buffer + 'थ'
-                # --- dh ---
-                elif char == 'h' and prev_char == 'd':
-                    char_buffer = char_buffer + translit_char(char)
-                    char_buffer = char_buffer[:-6]
-                    char_buffer = char_buffer + 'ध'
-                # --- ph ---
-                elif char == 'h' and prev_char == 'p':
-                    char_buffer = char_buffer + translit_char(char)
-                    char_buffer = char_buffer[:-6]
-                    char_buffer = char_buffer + 'फ'
-                # --- bh ---
-                elif char == 'h' and prev_char == 'b':
-                    char_buffer = char_buffer + translit_char(char)
-                    char_buffer = char_buffer[:-6]
-                    char_buffer = char_buffer + 'भ'
+        # --- process diftong matra after unaspirated consonant ---
+        if lat_item in diftongs and prev_lat_item in consonants:
+            deva_char_string = deva_char_string + translit_maatra(lat_item)
+            continue
 
-                # --- process CONJUNCTS ---
-                # conjunct_candidate = prev_char + char
-                conjunct_tuple = (prev_char, char)
-                #conjunct_tuple_str = str(conjunct_tuple)
+        deva_char_string = deva_char_string + translit_char(lat_item)
 
-                if conjunct_tuple in conjunct_tuple_list:
-                    #len_prev_char = len(prev_char)
-                    char_buffer = char_buffer[:-3]
-                    char_buffer = char_buffer + translit_char(prev_char) + '्' + translit_char(char)
-
-                # --- st ---
-                # if char == 't' and prev_char in consonants:
-                #    char_buffer = char_buffer[:-3]
-                #    if prev_char == 's':
-                #        #char_buffer = char_buffer + 'स्त'
-                #        char_buffer = char_buffer + translit_char(prev_char) + '्' + translit_char(char)
-
-                #else:
-                #    if char == 'h':
-                #        next
-                #    else:
-                #        char_buffer = char_buffer + translit_char(char)
-
-            elif char in vowels:
-                prev_char = word[i - 1]
-
-                # --- process diftongs ---
-                # -- ai --
-                if char == 'i' and prev_char == 'a':
-                    char_buffer = char_buffer + 'ै'
-                # --- ou ---
-                elif char == 'u' and prev_char == 'o':
-                    char_buffer = char_buffer[:-3]
-                    char_buffer = char_buffer + 'ौ'
-                # --- process maatras ---
-                elif prev_char in consonants:
-                    # process default a
-                    if char == 'a':
-                        pass
-                    else:
-                        char_buffer = char_buffer + translit_maatra(char)
-                else:
-                    char_buffer = char_buffer + 'xxx'
-
-        #else:  # USE THIS FOR CAPTURING UNRECOGNIZED CHARS
-            #pass
-            # if char == 'u00f1':
-            #    char_buffer = char_buffer + translit_maatra(char)
-            #    
-            # else:
-            #    #char_buffer = char_buffer + u'\u00f1'.encode('utf-8')
-            #    char_buffer = char_buffer + 'xxx'
-            #    
-
-        #return char_buffer
-    """
+    return deva_char_string
 
 
-# CALL:
-# --- Functioning ---
-# call = 'āṣidhṛdak' # ñidhīd
-# call_utf8 = call.decode('utf-8')
-# print latin_to_deva(call_utf8)
+print latin_to_deva('kǡlej')
 
-# Test
-# call = 'āṣidhṛdak' # ñidhīd
-# call_utf8 = call.decode('utf-8')
-print latin_to_deva('ā')
 
 # Test words:
-# namaste, gra, bolnā, jjh, puchie, āṣidhṛdak
+# namaste, gra, bolnā, jjh, puchie, kaise, kǡlej
 
-
-# ī
 # ā, ǡ, ī, ū, ṛ
 # ṅ, ñ, ṭ, ḍ, ṛ, ṇ, ś, ṣ
+# ṭh
