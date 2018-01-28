@@ -8,8 +8,9 @@ lower_c = ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r',
 # ṅ, ñ, ṭ, ḍ, ṛ, ṇ, ś, ṣ
 lower_c_diacritics = [u'\u1e45', u'\u00f1', u'\u1e6d', u'\u1e0d', u'\u1e5b', u'\u1e47', u'\u015b', u'\u1e63']
 vowels = upper_v + lower_v + lower_v_diacritics
-consonants = upper_c + lower_c + lower_c_diacritics
 aspirated_consonants = ['kh', 'gh', 'ch', 'jh', 'th', 'dh', 'ph', 'bh', u'ṭh', u'ḍh', u'ṛh']
+consonants = upper_c + lower_c + lower_c_diacritics + aspirated_consonants
+
 diftongs = ['ai', 'au']
 
 conjunct_tuple_list = [
@@ -357,7 +358,15 @@ def translit_char(char):
     if char == 'll':
         ret_val = 'ळ'
 
+    # --- Nasals ---
+    # --- ū̃ ---
+    if char == u'\u016b\u0303':
+        ret_val = 'ूँ'
+    if char == u'\u1ebd':
+        ret_val = 'ें'
+
     return ret_val
+
 
 def translit_maatra(char):
 
@@ -452,14 +461,22 @@ def latin_to_deva(lat_word):
             lat_char_list.append('ai')
             lat_char_list.pop(i - 1)
             continue
-        # --- ai ---
+        # --- au ---
         if lat_char == 'u' and prev_lat_char == 'a':
             lat_char_list.append('au')
             lat_char_list.pop(i - 1)
             continue
 
+        # --- process nasals built of several Unicode points ---
+        # --- ū̃ ---
+        if lat_char == u'\u0303' and prev_lat_char == u'\u016b':
+            lat_char_list.append(u'\u016b\u0303')
+            lat_char_list.pop(i - 1)
+            continue
+
         lat_char_list.append(lat_char)
 
+    #return lat_char_list  # DEBUG
 
     # --- Translitterate Latin-->Hindi ---
     deva_char_string = ''
@@ -485,21 +502,21 @@ def latin_to_deva(lat_word):
             continue
 
         # --- process aspirated consonants ---
-        if lat_item in aspirated_consonants:
-            deva_char_string = deva_char_string + translit_char(lat_item)
-            continue
+        #if lat_item in aspirated_consonants:
+        #    deva_char_string = deva_char_string + translit_char(lat_item)
+        #    continue
 
         # --- process simple matra after aspirated consonant ---
-        if lat_item in vowels and prev_lat_item in aspirated_consonants:
-            deva_char_string = deva_char_string + translit_maatra(lat_item)
-            continue
+        #if lat_item in vowels and prev_lat_item in aspirated_consonants:
+        #    deva_char_string = deva_char_string + translit_maatra(lat_item)
+        #    continue
 
-        # --- process simple matra after unaspirated consonant ---
+        # --- process simple matra ---
         if lat_item in vowels and prev_lat_item in consonants:
             deva_char_string = deva_char_string + translit_maatra(lat_item)
             continue
 
-        # --- process diftong matra after unaspirated consonant ---
+        # --- process diftong matra ---
         if lat_item in diftongs and prev_lat_item in consonants:
             deva_char_string = deva_char_string + translit_maatra(lat_item)
             continue
@@ -509,12 +526,12 @@ def latin_to_deva(lat_word):
     return deva_char_string
 
 
-print latin_to_deva('kǡlej')
+print latin_to_deva('kaise')
 
 
 # Test words:
-# namaste, gra, bolnā, jjh, puchie, kaise, kǡlej
+# namaste, gra, bolnā, jjh, puchie, kaise, kǡlej, hū̃, karū̃, auratẽ,
 
-# ā, ǡ, ī, ū, ṛ
+# ā, ǡ, ī, ū, ẽ, ṛ
 # ṅ, ñ, ṭ, ḍ, ṛ, ṇ, ś, ṣ
 # ṭh
