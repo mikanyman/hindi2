@@ -1,17 +1,19 @@
 # -*- coding: utf-8 -*-
 
-upper_v = ['A', 'E', 'I', 'O', 'U', 'Y']
-lower_v = ['a', 'i', 'o', 'u', 'e', 'y']
-lower_v_diacritics = [u'\u0101', u'\u01e1', u'\u012b', u'\u016b', u'\u1e5b']  # ā, ǡ, ī, ū, ṛ
 upper_c = ['B', 'C', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'X', 'Z']
 lower_c = ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'z']
 # ṅ, ñ, ṭ, ḍ, ṛ, ṇ, ś, ṣ
 lower_c_diacritics = [u'\u1e45', u'\u00f1', u'\u1e6d', u'\u1e0d', u'\u1e5b', u'\u1e47', u'\u015b', u'\u1e63']
-vowels = upper_v + lower_v + lower_v_diacritics
 aspirated_consonants = ['kh', 'gh', 'ch', 'jh', 'th', 'dh', 'ph', 'bh', u'ṭh', u'ḍh', u'ṛh']
+
+upper_v = ['A', 'E', 'I', 'O', 'U', 'Y']
+lower_v = ['a', 'i', 'o', 'u', 'e', 'y']
+lower_v_diacritics = [u'\u0101', u'\u01e1', u'\u012b', u'\u016b', u'\u1e5b', u'\u00f5']  # ā, ǡ, ī, ū, ṛ, õ
+
+vowels = upper_v + lower_v + lower_v_diacritics
 consonants = upper_c + lower_c + lower_c_diacritics + aspirated_consonants
 
-diftongs = ['ai', 'au']
+diftongs = ['ai', 'au', u'aĩ']
 
 conjunct_tuple_list = [
     (u'k', u'k'), (u'k', u'kh'), (u'k', u'g'), (u'k', u'gh'), (u'k', u'ṅ'), (u'k', u'c'), (u'k', u'ch'), (u'k', u'j'),
@@ -347,23 +349,26 @@ def translit_char(char):
         ret_val = 'फ'
     if char == 'bh':
         ret_val = 'भ'
-    """
-    if char == 'ṭh':  # .decode('utf-8')
+
+    if char == u'ṭh':  # .decode('utf-8')
         ret_val = 'ठ'
-    if char == 'ḍh':   # .decode('utf-8')
+    if char == u'ḍh':   # .decode('utf-8')
         ret_val = 'ढ'
-    if char == 'ṛh':  # .decode('utf-8')
+    if char == u'ṛh':  # .decode('utf-8')
         ret_val = 'ढ़'
-    """
+
     if char == 'll':
         ret_val = 'ळ'
 
     # --- Nasals ---
-    # --- ū̃ ---
-    if char == u'\u016b\u0303':
+    if char == u'\u016b\u0303':  # ū̃
         ret_val = 'ूँ'
-    if char == u'\u1ebd':
+    if char == u'\u1ebd':  # ẽ
         ret_val = 'ें'
+    if char == u'\u012b\u0303':  # ī̃
+        ret_val = 'ीं'
+    if char == u'\u0061\u0129':
+        ret_val = 'ैं'  # aĩ
 
     return ret_val
 
@@ -397,6 +402,10 @@ def translit_maatra(char):
         ret_val = 'ै'
     if char == 'au':
         ret_val = 'ौ'
+
+    # --- Latin Matra Diftongs with Diacritics ---
+    if char == u'a\u0129':  # aĩ
+        ret_val = 'ैं'
 
     return ret_val
 
@@ -454,6 +463,33 @@ def latin_to_deva(lat_word):
             lat_char_list.append('bh')
             lat_char_list.pop(i - 1)
             continue
+        # --- ṭh ---
+        if lat_char == 'h' and prev_lat_char == u'ṭ':
+            lat_char_list.append(u'ṭh')
+            lat_char_list.pop(i - 1)
+            continue
+        # --- ḍh ---
+        if lat_char == 'h' and prev_lat_char == u'ḍ':
+            lat_char_list.append(u'ḍh')
+            lat_char_list.pop(i - 1)
+            continue
+        # --- ṛh ---
+        if lat_char == 'h' and prev_lat_char == u'ṛ':
+            lat_char_list.append(u'ṛh')
+            lat_char_list.pop(i - 1)
+            continue
+
+        # --- process nasals built of several Unicode points ---
+        # --- ū̃ ---
+        if lat_char == u'\u0303' and prev_lat_char == u'\u016b':
+            lat_char_list.append(u'\u016b\u0303')
+            lat_char_list.pop(i - 1)
+            continue
+
+        if lat_char == u'\u0303' and prev_lat_char == u'\u012b':
+            lat_char_list.append(u'\u012b\u0303')
+            lat_char_list.pop(i - 1)
+            continue
 
         # --- Process diftongs ---
         # --- ai ---
@@ -466,11 +502,9 @@ def latin_to_deva(lat_word):
             lat_char_list.append('au')
             lat_char_list.pop(i - 1)
             continue
-
-        # --- process nasals built of several Unicode points ---
-        # --- ū̃ ---
-        if lat_char == u'\u0303' and prev_lat_char == u'\u016b':
-            lat_char_list.append(u'\u016b\u0303')
+        # --- aĩ ---
+        if lat_char == u'ĩ' and prev_lat_char == 'a':
+            lat_char_list.append(u'aĩ')
             lat_char_list.pop(i - 1)
             continue
 
@@ -526,12 +560,13 @@ def latin_to_deva(lat_word):
     return deva_char_string
 
 
-print latin_to_deva('kaise')
+print latin_to_deva('jhalāī')
 
 
 # Test words:
-# namaste, gra, bolnā, jjh, puchie, kaise, kǡlej, hū̃, karū̃, auratẽ,
+# namaste, gra, bolnā, jjh, puchie, kaise, kǡlej, hū̃, karū̃, auratẽ, haĩ, beṭõ, jhalāī
 
-# ā, ǡ, ī, ū, ẽ, ṛ
+# ā, ǡ, ī, ū, ẽ, ṛ, õ, ī̃
+# ĩ  # tilde
 # ṅ, ñ, ṭ, ḍ, ṛ, ṇ, ś, ṣ
-# ṭh
+# ṭh ḍh ṛh
